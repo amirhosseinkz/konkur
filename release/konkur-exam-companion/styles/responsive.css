@@ -1,0 +1,123 @@
+@media (max-width: 64rem) {
+  .app-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .shell-body {
+    grid-column: 1;
+  }
+
+  .sidebar {
+    width: min(var(--sidebar-width), calc(100vw - 3rem));
+    box-shadow: var(--shadow-raised);
+    transform: translateX(110%);
+    transition: transform var(--transition-fast);
+  }
+
+  .sidebar[data-open="true"] {
+    transform: translateX(0);
+  }
+
+  .menu-button {
+    display: inline-grid;
+    place-items: center;
+  }
+
+  .main-content {
+    padding-block-end: 6.5rem;
+  }
+
+  .mobile-nav {
+    position: fixed;
+    z-index: 35;
+    inset-inline: var(--space-3);
+    inset-block-end: var(--space-3);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-1);
+    padding: var(--space-1);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-md);
+    background: rgba(18, 24, 35, 0.96);
+    box-shadow: var(--shadow-raised);
+    backdrop-filter: blur(12px);
+  }
+
+  .mobile-nav a {
+    display: grid;
+    place-items: center;
+    padding-inline: var(--space-1);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 40rem) {
+  .topbar {
+    padding-inline: var(--space-3);
+  }
+
+  .topbar-context .eyebrow,
+  .search-trigger kbd {
+    display: none;
+  }
+
+  .search-trigger {
+    padding-inline: var(--space-3);
+  }
+
+  .search-trigger span:nth-child(2) {
+    display: none;
+  }
+
+  .main-content {
+    padding: var(--space-6) var(--space-4) 6.5rem;
+  }
+
+  .search-form,
+  .setting-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .search-form .button,
+  .setting-row .button {
+    width: 100%;
+  }
+
+  .exam-nav-row,
+  .exam-actions,
+  .empty-actions {
+    overflow-x: auto;
+  }
+
+  .hero-actions,
+  .study-actions,
+  .player-actions {
+    flex-direction: column;
+  }
+
+  .hero-actions .button,
+  .study-actions .button,
+  .player-actions .button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .toast-region {
+    inset-inline: var(--space-3);
+    inset-block-end: 5.5rem;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    transition-duration: 0.01ms;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+  }
+}

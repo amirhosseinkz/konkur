@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fa" dir="rtl" data-test-environment="true">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>آزمون‌های بنیاد برنامه</title>
+  <link rel="stylesheet" href="../../styles/tokens.css">
+  <link rel="stylesheet" href="../../styles/base.css">
+  <link rel="stylesheet" href="../../styles/layout.css">
+  <link rel="stylesheet" href="../../styles/components.css">
+  <link rel="stylesheet" href="../../styles/responsive.css">
+  <link rel="stylesheet" href="test-runner.css">
+</head>
+<body>
+  <div class="test-shell">
+    <header>
+      <p class="eyebrow">اجرا مستقیم از فایل محلی</p>
+      <h1>آزمون‌های بنیاد برنامه</h1>
+      <p id="test-summary" role="status" aria-live="polite">در حال اجرای آزمون‌ها</p>
+    </header>
+    <section aria-labelledby="results-heading">
+      <h2 id="results-heading">نتایج</h2>
+      <ol id="test-results" class="test-results"></ol>
+    </section>
+  </div>
+
+  <div class="app-shell test-app-host" id="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="پیمایش آزمایشی">
+      <nav class="primary-nav">
+        <a data-route="/dashboard" href="#/dashboard">داشبورد</a>
+        <a data-route="/exams" href="#/exams">آزمون‌ها</a>
+        <a data-route="/subjects" href="#/subjects">مطالعه</a>
+        <a data-route="/review" href="#/review">مرور</a>
+        <a data-route="/search" href="#/search">جست‌وجو</a>
+        <a data-route="/bookmarks" href="#/bookmarks">نشان‌شده‌ها</a>
+        <a data-route="/last-night" href="#/last-night">شب آخر</a>
+        <a data-route="/statistics" href="#/statistics">آمار</a>
+        <a data-route="/settings" href="#/settings">تنظیمات</a>
+      </nav>
+    </aside>
+    <div class="shell-body">
+      <header class="topbar">
+        <button id="menu-button" type="button" aria-controls="sidebar" aria-expanded="false"><span class="sr-only">باز کردن منو</span>☰</button>
+        <span id="route-context">آزمون</span>
+      </header>
+      <main id="main-content" class="main-content" tabindex="-1"></main>
+    </div>
+  </div>
+  <nav class="mobile-nav" aria-label="پیمایش سریع آزمایشی">
+    <a data-route="/dashboard" href="#/dashboard">داشبورد</a>
+    <a data-route="/exams" href="#/exams">آزمون‌ها</a>
+    <a data-route="/subjects" href="#/subjects">مطالعه</a>
+    <a data-route="/review" href="#/review">مرور</a>
+    <a data-route="/search" href="#/search">جست‌وجو</a>
+  </nav>
+  <div id="toast-region" role="status" aria-live="polite"></div>
+  <div id="fatal-region" role="alert"></div>
+
+  <script>try { localStorage.clear(); } catch(e) {}</script>
+  <script defer src="preflight-errors.js"></script>
+  <script defer src="../../core/bootstrap/namespace.js"></script>
+  <script defer src="../../core/bootstrap/environment.js?v=15"></script>
+  <script defer src="../../core/validation/validators.js?v=22"></script>
+  <script defer src="../../core/validation/exam-validators.js?v=1"></script>
+  <script defer src="../../content/registry/dataset-registry.js?v=18"></script>
+  <script defer src="../../content/topics/topic-validation.js?v=1"></script>
+  <script defer src="../../content/question-links/question-link-validation.js?v=1"></script>
+  <script defer src="../../content/sources/source-validation.js?v=3"></script>
+  <script defer src="../../content/sources/source-registry.js?v=2"></script>
+  <script defer src="../../content/sources/source-inventory.js?v=1"></script>
+  <script defer src="../../content/exams/exam-1395.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1396.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1397.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1398.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1399.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1400.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1401.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1402.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1403.js?v=3"></script>
+  <script defer src="../../content/exams/exam-1404.js?v=3"></script>
+  <script defer src="../../content/subjects/network.js?v=1"></script>
+  <script defer src="../../content/topics/topic-registry.js?v=1"></script>
+  <script defer src="../../content/topics/topic-relations.js?v=1"></script>
+  <script defer src="../../content/lessons/network/network-crash-course.js?v=1"></script>
+  <script defer src="../../content/golden-rules/network-golden-rules.js?v=1"></script>
+  <script defer src="../../content/exam-traps/network-exam-traps.js?v=1"></script>
+  <script defer src="../../content/flashcards/network-flashcards.js?v=1"></script>
+  <script defer src="../../content/reviews/network-five-minute-review.js?v=1"></script>
+  <script defer src="../../content/subjects/database.js?v=1"></script>
+  <script defer src="../../content/topics/database-topic-registry.js?v=1"></script>
+  <script defer src="../../content/topics/database-topic-relations.js?v=1"></script>
+  <script defer src="../../content/lessons/database/database-crash-course.js?v=1"></script>
+  <script defer src="../../content/golden-rules/database-golden-rules.js?v=1"></script>
+  <script defer src="../../content/exam-traps/database-exam-traps.js?v=1"></script>
+  <script defer src="../../content/flashcards/database-flashcards.js?v=1"></script>
+  <script defer src="../../content/reviews/database-five-minute-review.js?v=1"></script>
+  <script defer src="../../content/subjects/operating-system.js?v=1"></script>
+  <script defer src="../../content/topics/operating-system-topic-registry.js?v=1"></script>
+  <script defer src="../../content/topics/operating-system-topic-relations.js?v=1"></script>
+  <script defer src="../../content/lessons/operating-system/operating-system-crash-course.js?v=1"></script>
+  <script defer src="../../content/golden-rules/operating-system-golden-rules.js?v=1"></script>
+  <script defer src="../../content/exam-traps/operating-system-exam-traps.js?v=1"></script>
+  <script defer src="../../content/flashcards/operating-system-flashcards.js?v=1"></script>
+  <script defer src="../../content/reviews/operating-system-five-minute-review.js?v=1"></script>
+  <script defer src="../../content/subjects/data-structures.js?v=1"></script>
+  <script defer src="../../content/topics/data-structures-topic-registry.js?v=1"></script>
+  <script defer src="../../content/topics/data-structures-topic-relations.js?v=1"></script>
+  <script defer src="../../content/lessons/data-structures/data-structures-crash-course.js?v=1"></script>
+  <script defer src="../../content/golden-rules/data-structures-golden-rules.js?v=1"></script>
+  <script defer src="../../content/exam-traps/data-structures-exam-traps.js?v=1"></script>
+  <script defer src="../../content/flashcards/data-structures-flashcards.js?v=1"></script>
+  <script defer src="../../content/reviews/data-structures-five-minute-review.js?v=1"></script>
+  <script defer src="../../content/subjects/english.js?v=1"></script>
+  <script defer src="../../content/question-links/question-topic-links.js?v=1"></script>
+  <script defer src="../../core/storage/storage-schema.js?v=19"></script>
+  <script defer src="../../core/storage/storage-adapter.js?v=19"></script>
+  <script defer src="../../core/state/app-state.js?v=15"></script>
+  <script defer src="../../core/search/normalizer.js?v=15"></script>
+  <script defer src="../../core/search/search-index.js?v=15"></script>
+  <script defer src="../../core/router/routes.js?v=7"></script>
+  <script defer src="../fixtures/foundation-search-fixture.js"></script>
+  <script defer src="../fixtures/exam-test-fixture.js?v=2"></script>
+  <script defer src="../../core/ui/dom.js"></script>
+  <script defer src="../../core/ui/components.js"></script>
+  <script defer src="../../core/ui/notifications.js?v=15"></script>
+  <script defer src="../../core/ui/shell.js?v=19"></script>
+  <script defer src="../../features/learning/learning-engine.js?v=2"></script>
+  <script defer src="../../features/dashboard/dashboard-page.js?v=7"></script>
+  <script defer src="../../features/subjects/subjects-page.js?v=11"></script>
+  <script defer src="../../features/last-night/last-night-page.js?v=13"></script>
+  <script defer src="../../features/search/search-page.js?v=10"></script>
+  <script defer src="../../features/flashcards/flashcards-page.js?v=2"></script>
+  <script defer src="../../features/bookmarks/bookmarks-page.js?v=4"></script>
+  <script defer src="../../features/review/review-page.js?v=4"></script>
+  <script defer src="../../features/statistics/statistics-page.js?v=3"></script>
+  <script defer src="../../features/settings/settings-page.js?v=18"></script>
+  <script defer src="../../features/settings/source-status-page.js?v=1"></script>
+  <script defer src="../../features/exam/answer-resolver.js?v=1"></script>
+  <script defer src="../../features/exam/scoring-engine.js?v=2"></script>
+  <script defer src="../../features/exam/session-manager.js?v=2"></script>
+  <script defer src="../../features/exam/exam-service.js?v=3"></script>
+  <script defer src="../../features/exam/exam-viewer.js?v=6"></script>
+  <script defer src="../../features/exam/exams-page.js?v=5"></script>
+  <script defer src="../../features/exam/practice-mode.js?v=6"></script>
+  <script defer src="../../features/exam/exam-mode.js?v=6"></script>
+  <script defer src="../../features/exam/exam-results-page.js?v=4"></script>
+  <script defer src="../../core/router/router.js"></script>
+  <script defer src="../../core/bootstrap/bootstrap.js?v=25"></script>
+  <script defer src="test-harness.js?v=16"></script>
+  <script defer src="../unit/bootstrap.test.js?v=15"></script>
+  <script defer src="../unit/router.test.js?v=15"></script>
+  <script defer src="../unit/search.test.js?v=15"></script>
+  <script defer src="../unit/storage.test.js?v=19"></script>
+  <script defer src="../unit/dataset-registry.test.js?v=18"></script>
+  <script defer src="../unit/source-registry.test.js?v=2"></script>
+  <script defer src="../unit/exam-validators.test.js?v=1"></script>
+  <script defer src="../unit/sprint3-exam-tests.js?v=3"></script>
+  <script defer src="../unit/milestone-d-legacy-import.test.js?v=1"></script>
+  <script defer src="../unit/milestone-e-network.test.js?v=3"></script>
+  <script defer src="../unit/milestone-f-database.test.js?v=2"></script>
+  <script defer src="../unit/milestone-g-operating-system.test.js?v=2"></script>
+  <script defer src="../unit/milestone-h-data-structures.test.js?v=2"></script>
+  <script defer src="../unit/milestone-i-learning-engine.test.js?v=2"></script>
+  <script defer src="../unit/milestone-j-final-release.test.js?v=4"></script>
+  <script defer src="../unit/milestone-n-english-module.test.js?v=1"></script>
+  <script defer src="../unit/rc1-b-persian-consistency.test.js?v=1"></script>
+  <script defer src="../unit/rc1-c-information-architecture.test.js?v=1"></script>
+  <script defer src="../unit/rc1-d-layout-typography.test.js?v=1"></script>
+  <script defer src="../unit/rc1-e-exam-workspace.test.js?v=1"></script>
+  <script defer src="../unit/state.test.js?v=15"></script>
+  <script defer src="browser-flow.test.js?v=18"></script>
+  <script defer src="run-tests.js?v=37"></script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Source Checksum Tool — Konkur</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #090c11;
+      --surface: #0d1118;
+      --raised: #121823;
+      --border: #263244;
+      --text: #cdd5df;
+      --text-strong: #f2f5f9;
+      --text-muted: #8b98a9;
+      --accent: #72d7b0;
+      --focus: #a6d4ff;
+      --radius: 10px;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 2rem;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, sans-serif;
+      line-height: 1.6;
+    }
+    h1 { color: var(--text-strong); margin: 0 0 0.5rem; font-size: 1.5rem; }
+    p { color: var(--text-muted); margin: 0 0 1.5rem; }
+    .tool-card {
+      max-width: 48rem;
+      margin: 0 auto;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--raised);
+    }
+    .file-area {
+      display: grid;
+      gap: 1rem;
+    }
+    .drop-zone {
+      padding: 2rem;
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 120ms ease;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      border-color: var(--accent);
+    }
+    .drop-zone span { color: var(--text-muted); }
+    input[type="file"] { display: none; }
+    .results { margin-top: 1rem; }
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .results-table th, .results-table td {
+      padding: 0.5rem 0.75rem;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      font-size: 0.875rem;
+    }
+    .results-table th { color: var(--text-strong); font-weight: 700; }
+    .results-table td { color: var(--text); }
+    .checksum { font-family: "SF Mono", Consolas, monospace; font-size: 0.8rem; word-break: break-all; }
+    .copy-btn {
+      padding: 0.25rem 0.5rem;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.75rem;
+    }
+    .copy-btn:hover { border-color: var(--accent); color: var(--accent); }
+    :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+    .note { margin-top: 1.5rem; padding: 0.75rem; border: 1px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text-muted); font-size: 0.8125rem; }
+  </style>
+</head>
+<body>
+  <main class="tool-card">
+    <h1>Source Checksum Tool</h1>
+    <p>Select one or more files to calculate SHA-256 checksums. Files are read locally and never uploaded.</p>
+
+    <div class="file-area">
+      <label class="drop-zone" for="file-input" tabindex="0" role="button" aria-label="Select files for checksum calculation">
+        <span id="drop-label">Click or drop files here to calculate SHA-256 checksums</span>
+      </label>
+      <input type="file" id="file-input" multiple aria-label="Select files for checksum calculation">
+
+      <div class="results" id="results" aria-live="polite"></div>
+    </div>
+
+    <div class="note">
+      This is a repository maintenance tool. The Konkur application itself does not require Node.js, Python, or a server at runtime. Checksums are calculated entirely in your browser using the SubtleCrypto API.
+    </div>
+  </main>
+
+  <script defer>
+    (function() {
+      "use strict";
+
+      var dropZone = document.querySelector(".drop-zone");
+      var fileInput = document.getElementById("file-input");
+      var dropLabel = document.getElementById("drop-label");
+      var resultsDiv = document.getElementById("results");
+
+      function formatBytes(bytes) {
+        if (bytes < 1024) return bytes + " B";
+        if (bytes < 1048576) return (bytes / 1024).toFixed(1) + " KB";
+        return (bytes / 1048576).toFixed(2) + " MB";
+      }
+
+      function copyToClipboard(text) {
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(text).catch(function() {});
+        }
+      }
+
+      async function calculateChecksum(file) {
+        var buffer = await file.arrayBuffer();
+        var hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+        var hashArray = Array.from(new Uint8Array(hashBuffer));
+        var hex = hashArray.map(function(b) { return b.toString(16).padStart(2, "0"); }).join("");
+        return "sha256:" + hex;
+      }
+
+      async function processFiles(files) {
+        resultsDiv.innerHTML = "";
+        if (files.length === 0) return;
+
+        var table = document.createElement("table");
+        table.className = "results-table";
+        var thead = document.createElement("thead");
+        thead.innerHTML = "<tr><th>Filename</th><th>Size</th><th>Checksum</th><th></th></tr>";
+        table.append(thead);
+        var tbody = document.createElement("tbody");
+        table.append(tbody);
+        resultsDiv.append(table);
+
+        for (var i = 0; i < files.length; i++) {
+          var file = files[i];
+          var row = document.createElement("tr");
+
+          var nameCell = document.createElement("td");
+          nameCell.textContent = file.name;
+          row.append(nameCell);
+
+          var sizeCell = document.createElement("td");
+          sizeCell.textContent = formatBytes(file.size);
+          row.append(sizeCell);
+
+          var checksumCell = document.createElement("td");
+          checksumCell.className = "checksum";
+          checksumCell.textContent = "calculating...";
+          row.append(checksumCell);
+
+          var actionCell = document.createElement("td");
+          var copyBtn = document.createElement("button");
+          copyBtn.className = "copy-btn";
+          copyBtn.textContent = "Copy";
+          copyBtn.style.display = "none";
+          copyBtn.addEventListener("click", function(text, btn) {
+            return function() {
+              copyToClipboard(text);
+              btn.textContent = "Copied";
+              setTimeout(function() { btn.textContent = "Copy"; }, 1500);
+            };
+          }("", copyBtn));
+          actionCell.append(copyBtn);
+          row.append(actionCell);
+
+          tbody.append(row);
+
+          try {
+            var checksum = await calculateChecksum(file);
+            checksumCell.textContent = checksum;
+            copyBtn.style.display = "inline-block";
+            copyBtn.onclick = function(text, btn) {
+              return function() {
+                copyToClipboard(text);
+                btn.textContent = "Copied";
+                setTimeout(function() { btn.textContent = "Copy"; }, 1500);
+              };
+            }(checksum, copyBtn);
+          } catch (err) {
+            checksumCell.textContent = "ERROR: " + (err.message || String(err));
+          }
+        }
+
+        dropLabel.textContent = files.length + " file(s) processed. Select more files to recalculate.";
+      }
+
+      fileInput.addEventListener("change", function() {
+        if (fileInput.files && fileInput.files.length > 0) {
+          processFiles(fileInput.files);
+        }
+      });
+
+      dropZone.addEventListener("keydown", function(e) {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          fileInput.click();
+        }
+      });
+
+      dropZone.addEventListener("dragover", function(e) {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+
+      dropZone.addEventListener("dragleave", function() {
+        dropZone.classList.remove("dragover");
+      });
+
+      dropZone.addEventListener("drop", function(e) {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+          processFiles(e.dataTransfer.files);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

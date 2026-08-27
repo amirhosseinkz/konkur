@@ -1,0 +1,46 @@
+.test-shell {
+  width: min(100% - 2rem, 64rem);
+  margin-inline: auto;
+  padding-block: 3rem;
+}
+
+.test-app-host {
+  min-height: 36rem;
+  border-block: 1px solid var(--border-strong);
+}
+
+
+.test-shell header {
+  margin-block-end: 2rem;
+}
+
+.test-results {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  list-style: none;
+}
+
+.test-result {
+  padding: 1rem;
+  border: 1px solid var(--border-subtle);
+  border-inline-start: 4px solid var(--success);
+  border-radius: var(--radius-sm);
+  background: var(--surface-raised);
+}
+
+.test-result[data-status="failed"] {
+  border-inline-start-color: var(--danger);
+}
+
+.test-result strong,
+.test-result pre {
+  display: block;
+}
+
+.test-result pre {
+  max-width: 100%;
+  overflow: auto;
+  color: var(--danger);
+  white-space: pre-wrap;
+}

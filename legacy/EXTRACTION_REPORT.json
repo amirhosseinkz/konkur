@@ -1,0 +1,85 @@
+{
+  "yearsImported": [
+    1395,
+    1396,
+    1397,
+    1398,
+    1399,
+    1400,
+    1401,
+    1402,
+    1403,
+    1404
+  ],
+  "totalQuestions": 1276,
+  "deletedQuestions": 7,
+  "multipleAnswerQuestions": 1,
+  "sections": {
+    "1395": [
+      "language: 30q",
+      "technical: 91q",
+      "all: 121q"
+    ],
+    "1396": [
+      "language: 30q",
+      "technical: 110q",
+      "all: 140q"
+    ],
+    "1397": [
+      "language: 30q",
+      "technical: 110q",
+      "all: 140q"
+    ],
+    "1398": [
+      "language: 30q",
+      "technical: 110q",
+      "all: 140q"
+    ],
+    "1399": [
+      "language: 30q",
+      "technical: 120q",
+      "all: 150q"
+    ],
+    "1400": [
+      "language: 30q",
+      "quick: 13q",
+      "dsa: 12q",
+      "systems: 20q",
+      "developer: 62q",
+      "all: 120q"
+    ],
+    "1401": [
+      "language: 30q",
+      "quick: 13q",
+      "dsa: 12q",
+      "systems: 20q",
+      "developer: 62q",
+      "all: 120q"
+    ],
+    "1402": [
+      "language: 25q",
+      "quick: 13q",
+      "dsa: 12q",
+      "systems: 20q",
+      "developer: 57q",
+      "all: 115q"
+    ],
+    "1403": [
+      "language: 25q",
+      "quick: 13q",
+      "dsa: 12q",
+      "systems: 20q",
+      "developer: 57q",
+      "all: 115q"
+    ],
+    "1404": [
+      "language: 25q",
+      "quick: 13q",
+      "dsa: 12q",
+      "systems: 20q",
+      "developer: 57q",
+      "all: 115q"
+    ]
+  },
+  "warnings": []
+}

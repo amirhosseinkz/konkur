@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#0b0e14">
+  <title>داشبورد | همراه آزمون ارشد کامپیوتر</title>
+  <link rel="stylesheet" href="styles/tokens.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/responsive.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">رفتن به محتوای اصلی</a>
+
+  <div class="app-shell" id="app-shell">
+    <aside class="sidebar" id="sidebar" aria-label="پیمایش اصلی">
+      <div class="brand-block">
+        <span class="brand-mark" aria-hidden="true">K</span>
+        <div>
+          <strong class="brand-title">همراه کنکور</strong>
+          <span class="brand-subtitle">مهندسی کامپیوتر</span>
+        </div>
+      </div>
+
+      <nav class="primary-nav" aria-label="بخش‌های برنامه">
+        <a data-route="/dashboard" href="#/dashboard">داشبورد</a>
+        <a data-route="/exams" href="#/exams">آزمون‌ها</a>
+        <a data-route="/subjects" href="#/subjects">مطالعه</a>
+        <a data-route="/review" href="#/review">مرور</a>
+        <a data-route="/search" href="#/search">جست‌وجو</a>
+        <a data-route="/bookmarks" href="#/bookmarks">نشان‌شده‌ها</a>
+        <a data-route="/last-night" href="#/last-night">شب آخر</a>
+        <a data-route="/statistics" href="#/statistics">آمار</a>
+        <a data-route="/settings" href="#/settings">تنظیمات</a>
+      </nav>
+
+      <div class="source-status" aria-label="وضعیت داده‌ها">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span>منبع تأییدشده: صفر</span>
+      </div>
+    </aside>
+
+    <div class="shell-body">
+      <header class="topbar">
+        <button class="icon-button menu-button" id="menu-button" type="button" aria-controls="sidebar" aria-expanded="false">
+          <span aria-hidden="true">☰</span>
+          <span class="sr-only">باز کردن منو</span>
+        </button>
+        <div class="topbar-context">
+          <span class="eyebrow">آفلاین و مبتنی بر منابع رسمی</span>
+          <span id="route-context">داشبورد</span>
+        </div>
+        <a class="search-trigger" href="#/search" aria-label="باز کردن جست‌وجوی سراسری">
+          <span aria-hidden="true">⌕</span>
+          <span>جست‌وجو</span>
+          <kbd aria-hidden="true">/</kbd>
+        </a>
+      </header>
+
+      <main class="main-content" id="main-content" tabindex="-1">
+        <section class="startup-fallback" aria-labelledby="startup-title">
+          <p class="eyebrow">در حال راه‌اندازی محلی</p>
+          <h1 id="startup-title">همراه آزمون آماده می‌شود</h1>
+          <p>هنوز هیچ مجموعه‌دادهٔ تأییدشده‌ای وارد نشده است. برنامه بدون ساخت محتوای آموزشی فرضی راه‌اندازی می‌شود.</p>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" aria-label="پیمایش سریع">
+    <a data-route="/dashboard" href="#/dashboard">داشبورد</a>
+    <a data-route="/exams" href="#/exams">آزمون‌ها</a>
+    <a data-route="/subjects" href="#/subjects">مطالعه</a>
+    <a data-route="/review" href="#/review">مرور</a>
+    <a data-route="/search" href="#/search">جست‌وجو</a>
+  </nav>
+
+  <div class="toast-region" id="toast-region" role="status" aria-live="polite" aria-atomic="true"></div>
+  <div class="fatal-region" id="fatal-region" role="alert" aria-live="assertive"></div>
+
+  <noscript>
+    <section class="noscript-message" aria-label="جاوااسکریپت غیرفعال است">
+      <h1>جاوااسکریپت لازم است</h1>
+      <p>این برنامهٔ آفلاین برای مسیریابی و نگهداری امن پیشرفت به جاوااسکریپت مرورگر نیاز دارد.</p>
+    </section>
+  </noscript>
+
+  <script defer src="core/bootstrap/namespace.js"></script>
+  <script defer src="core/bootstrap/environment.js"></script>
+  <script defer src="core/validation/validators.js"></script>
+  <script defer src="core/validation/exam-validators.js"></script>
+  <script defer src="content/registry/dataset-registry.js"></script>
+  <script defer src="content/topics/topic-validation.js"></script>
+  <script defer src="content/question-links/question-link-validation.js"></script>
+  <script defer src="content/sources/source-validation.js"></script>
+  <script defer src="content/sources/source-registry.js"></script>
+  <script defer src="content/sources/source-inventory.js"></script>
+  <script defer src="content/exams/exam-1395.js"></script>
+  <script defer src="content/exams/exam-1396.js"></script>
+  <script defer src="content/exams/exam-1397.js"></script>
+  <script defer src="content/exams/exam-1398.js"></script>
+  <script defer src="content/exams/exam-1399.js"></script>
+  <script defer src="content/exams/exam-1400.js"></script>
+  <script defer src="content/exams/exam-1401.js"></script>
+  <script defer src="content/exams/exam-1402.js"></script>
+  <script defer src="content/exams/exam-1403.js"></script>
+  <script defer src="content/exams/exam-1404.js"></script>
+  <script defer src="content/subjects/network.js"></script>
+  <script defer src="content/topics/topic-registry.js"></script>
+  <script defer src="content/topics/topic-relations.js"></script>
+  <script defer src="content/lessons/network/network-crash-course.js"></script>
+  <script defer src="content/golden-rules/network-golden-rules.js"></script>
+  <script defer src="content/exam-traps/network-exam-traps.js"></script>
+  <script defer src="content/flashcards/network-flashcards.js"></script>
+  <script defer src="content/reviews/network-five-minute-review.js"></script>
+  <script defer src="content/subjects/database.js"></script>
+  <script defer src="content/topics/database-topic-registry.js"></script>
+  <script defer src="content/topics/database-topic-relations.js"></script>
+  <script defer src="content/lessons/database/database-crash-course.js"></script>
+  <script defer src="content/golden-rules/database-golden-rules.js"></script>
+  <script defer src="content/exam-traps/database-exam-traps.js"></script>
+  <script defer src="content/flashcards/database-flashcards.js"></script>
+  <script defer src="content/reviews/database-five-minute-review.js"></script>
+  <script defer src="content/subjects/operating-system.js"></script>
+  <script defer src="content/topics/operating-system-topic-registry.js"></script>
+  <script defer src="content/topics/operating-system-topic-relations.js"></script>
+  <script defer src="content/lessons/operating-system/operating-system-crash-course.js"></script>
+  <script defer src="content/golden-rules/operating-system-golden-rules.js"></script>
+  <script defer src="content/exam-traps/operating-system-exam-traps.js"></script>
+  <script defer src="content/flashcards/operating-system-flashcards.js"></script>
+  <script defer src="content/reviews/operating-system-five-minute-review.js"></script>
+  <script defer src="content/subjects/data-structures.js"></script>
+  <script defer src="content/topics/data-structures-topic-registry.js"></script>
+  <script defer src="content/topics/data-structures-topic-relations.js"></script>
+  <script defer src="content/lessons/data-structures/data-structures-crash-course.js"></script>
+  <script defer src="content/golden-rules/data-structures-golden-rules.js"></script>
+  <script defer src="content/exam-traps/data-structures-exam-traps.js"></script>
+  <script defer src="content/flashcards/data-structures-flashcards.js"></script>
+  <script defer src="content/reviews/data-structures-five-minute-review.js"></script>
+  <script defer src="content/subjects/english.js"></script>
+  <script defer src="content/question-links/question-topic-links.js"></script>
+  <script defer src="core/storage/storage-schema.js"></script>
+  <script defer src="core/storage/storage-adapter.js"></script>
+  <script defer src="core/state/app-state.js"></script>
+  <script defer src="core/search/normalizer.js"></script>
+  <script defer src="core/search/search-index.js"></script>
+  <script defer src="core/router/routes.js"></script>
+  <script defer src="core/ui/dom.js"></script>
+  <script defer src="core/ui/components.js"></script>
+  <script defer src="core/ui/notifications.js"></script>
+  <script defer src="core/ui/shell.js"></script>
+  <script defer src="features/learning/learning-engine.js"></script>
+  <script defer src="features/dashboard/dashboard-page.js"></script>
+  <script defer src="features/subjects/subjects-page.js"></script>
+  <script defer src="features/last-night/last-night-page.js"></script>
+  <script defer src="features/search/search-page.js"></script>
+  <script defer src="features/flashcards/flashcards-page.js"></script>
+  <script defer src="features/bookmarks/bookmarks-page.js"></script>
+  <script defer src="features/review/review-page.js"></script>
+  <script defer src="features/statistics/statistics-page.js"></script>
+  <script defer src="features/settings/settings-page.js"></script>
+  <script defer src="features/settings/source-status-page.js"></script>
+  <script defer src="features/exam/answer-resolver.js"></script>
+  <script defer src="features/exam/scoring-engine.js"></script>
+  <script defer src="features/exam/session-manager.js"></script>
+  <script defer src="features/exam/exam-service.js"></script>
+  <script defer src="features/exam/exam-viewer.js"></script>
+  <script defer src="features/exam/exams-page.js"></script>
+  <script defer src="features/exam/practice-mode.js"></script>
+  <script defer src="features/exam/exam-mode.js"></script>
+  <script defer src="features/exam/exam-results-page.js"></script>
+  <script defer src="core/router/router.js"></script>
+  <script defer src="core/bootstrap/bootstrap.js"></script>
+</body>
+</html>
