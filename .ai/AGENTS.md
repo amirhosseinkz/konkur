@@ -1,5 +1,7 @@
 # AGENTS.md
 
+> Historical Prototype Zero instructions. Production-platform agents must follow `/AGENTS.md`, `/project/context.yaml`, and `/project/state.yaml`. This file must not override production decisions.
+
 # Computer Engineering MSc Exam Companion
 
 Version: 1.0

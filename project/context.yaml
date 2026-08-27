@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "project_id": "konkur-platform",
+  "product_name": "Konkur",
+  "constitution_version": 1,
+  "context_updated_on": "2026-08-27",
+  "prototype": {
+    "name": "Prototype Zero",
+    "status": "historical-evidence",
+    "architecture_reusable": false,
+    "paths": ["index.html", "core", "features", "content", "styles", "release", ".ai"]
+  },
+  "product": {
+    "market": "Iranian entrance exam preparation",
+    "architecture_horizon": "exam-based platform",
+    "primary_language": "fa-IR",
+    "initial_complete_vertical": "masters-computer-engineering",
+    "public_release_model": "general-availability-only"
+  },
+  "exam_scope": {
+    "included_families": ["national-entrance", "masters-entrance"],
+    "future_families": ["doctoral-entrance"],
+    "national_groups": [
+      "mathematics-physics",
+      "experimental-sciences",
+      "humanities",
+      "arts",
+      "foreign-languages"
+    ]
+  },
+  "surfaces": {
+    "learner": {
+      "type": "single-responsive-website",
+      "includes": ["public", "seo", "account", "learning", "exam", "billing"],
+      "native_application": false
+    },
+    "admin": {
+      "type": "separately-protected-web-surface",
+      "shares_learner_authorization": false
+    }
+  },
+  "ai": {
+    "role": "optional-accelerator",
+    "core_dependency": false,
+    "automatic_publication": false,
+    "provider_neutral": true,
+    "local_models_allowed": true,
+    "runtime_fallback_required": true
+  },
+  "release": {
+    "public_mvp": false,
+    "public_beta": false,
+    "internal_milestones_allowed": true,
+    "ga_requires_all_launch_gates": true
+  },
+  "stable_decisions": [
+    {"id": "D-001", "status": "accepted", "value": "production-successor-not-prototype-extension", "adr": "docs/decisions/ADR-0024-production-successor.md"},
+    {"id": "D-002", "status": "accepted", "value": "single-responsive-learner-website", "adr": "docs/decisions/ADR-0025-web-delivery-surfaces.md"},
+    {"id": "D-003", "status": "accepted", "value": "no-public-release-before-ga", "adr": "docs/decisions/ADR-0026-general-availability-only.md"},
+    {"id": "D-004", "status": "accepted", "value": "ai-optional-and-non-authoritative", "adr": "docs/decisions/ADR-0027-ai-as-optional-accelerator.md"},
+    {"id": "D-005", "status": "accepted", "value": "context-as-code", "adr": "docs/decisions/ADR-0028-context-as-code.md"},
+    {"id": "D-006", "status": "accepted", "value": "computer-engineering-msc-first-complete-vertical", "adr": "docs/decisions/ADR-0024-production-successor.md"}
+  ],
+  "required_documents": [
+    "AGENTS.md",
+    "docs/README.md",
+    "docs/00-product/PRODUCT_CONSTITUTION.md",
+    "docs/00-product/LAUNCH_SCOPE.md",
+    "docs/00-product/BUSINESS_MODEL.md",
+    "docs/00-product/AI_POLICY.md",
+    "docs/01-domain/DOMAIN_GLOSSARY.md",
+    "docs/01-domain/CONTENT_PROVENANCE_POLICY.md",
+    "docs/02-architecture/ARCHITECTURE_PRINCIPLES.md",
+    "docs/03-security/SECURITY_BASELINE.md",
+    "docs/04-engineering/AGENT_PROTOCOL.md",
+    "docs/04-engineering/DEFINITION_OF_DONE.md",
+    "docs/05-design/DESIGN_PRINCIPLES.md",
+    "docs/06-operations/PRODUCTION_LAUNCH_GATES.md",
+    "docs/project/RISK_REGISTER.md",
+    "docs/project/DECISIONS_PENDING.md",
+    "docs/project/MILESTONE_0_REPORT.md",
+    "project/context.yaml",
+    "project/state.yaml",
+    "project/roadmap.yaml"
+  ]
+}

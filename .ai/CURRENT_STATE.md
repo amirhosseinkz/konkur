@@ -1,5 +1,7 @@
 # CURRENT_STATE.md
 
+> Historical Prototype Zero state. The production platform's current source of truth is `/project/state.yaml`.
+
 # Computer Engineering MSc Exam Companion
 
 Version: Live

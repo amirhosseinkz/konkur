@@ -1,5 +1,7 @@
 # START_HERE.md
 
+> Historical Prototype Zero entry point. For production-platform work, begin at `/AGENTS.md`. The authority and reading order below apply only to the prototype.
+
 # 🚀 Computer Engineering MSc Exam Companion
 
 Welcome.

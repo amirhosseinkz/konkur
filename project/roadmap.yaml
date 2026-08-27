@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "project_id": "konkur-platform",
+  "release_policy": "internal-milestones-until-ga",
+  "milestones": [
+    {
+      "id": "milestone-0",
+      "name": "Product Constitution and Context System",
+      "status": "completed",
+      "dependencies": [],
+      "public_release": false,
+      "exit_evidence": ["Context validator passes", "Product constitution accepted", "Agent handoff context complete"]
+    },
+    {
+      "id": "milestone-1",
+      "name": "Market, Legal, Source, and Content Feasibility",
+      "status": "ready",
+      "dependencies": ["milestone-0"],
+      "public_release": false,
+      "exit_evidence": ["Source rights decision", "Official source inventory", "Computer Engineering MSc content release contract", "Pricing research plan"]
+    },
+    {
+      "id": "milestone-2",
+      "name": "Production Architecture and Design System",
+      "status": "blocked",
+      "dependencies": ["milestone-1"],
+      "public_release": false,
+      "exit_evidence": ["Stack ADR", "Threat model", "Domain contracts", "Design system specification", "Performance budgets"]
+    },
+    {
+      "id": "milestone-3",
+      "name": "Platform Foundation",
+      "status": "blocked",
+      "dependencies": ["milestone-2"],
+      "public_release": false,
+      "exit_evidence": ["Environments", "CI/CD", "Identity", "Database", "Observability", "Backup and restore foundation"]
+    },
+    {
+      "id": "milestone-4",
+      "name": "Content Platform and Admin",
+      "status": "blocked",
+      "dependencies": ["milestone-3"],
+      "public_release": false,
+      "exit_evidence": ["Source ingestion", "Editorial workflow", "Publication and rollback", "Admin RBAC and audit"]
+    },
+    {
+      "id": "milestone-5",
+      "name": "Learner Website and Computer Engineering MSc Vertical",
+      "status": "blocked",
+      "dependencies": ["milestone-4"],
+      "public_release": false,
+      "exit_evidence": ["Learner loop complete", "Exam workflows complete", "Vertical content contract passes", "Responsive and accessibility evidence"]
+    },
+    {
+      "id": "milestone-6",
+      "name": "Commerce, Public Website, and SEO",
+      "status": "blocked",
+      "dependencies": ["milestone-3", "milestone-5"],
+      "public_release": false,
+      "exit_evidence": ["Pricing approved", "Payment and entitlements complete", "Public website complete", "Technical SEO complete"]
+    },
+    {
+      "id": "milestone-7",
+      "name": "Production Hardening and Launch Readiness",
+      "status": "blocked",
+      "dependencies": ["milestone-6"],
+      "public_release": false,
+      "exit_evidence": ["Security assessment", "Load and recovery tests", "Support readiness", "All GA gates have evidence"]
+    },
+    {
+      "id": "milestone-8",
+      "name": "General Availability",
+      "status": "blocked",
+      "dependencies": ["milestone-7"],
+      "public_release": true,
+      "exit_evidence": ["Written GA decision", "Production deployment", "Monitoring and support active"]
+    }
+  ]
+}

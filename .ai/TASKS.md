@@ -1,5 +1,7 @@
 # TASKS.md
 
+> Historical Prototype Zero task history. Production milestones are defined in `/project/roadmap.yaml`.
+
 # Computer Engineering MSc Exam Companion
 
 Status: Active

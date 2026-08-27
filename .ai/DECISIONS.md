@@ -1,5 +1,7 @@
 # DECISIONS.md
 
+> Historical Prototype Zero decision log through ADR-0023. Production decisions continue under `/docs/decisions/` and may supersede prototype decisions.
+
 # Architecture Decision Record (ADR)
 
 Project:

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "project_id": "konkur-platform",
+  "updated_at": "2026-08-27T00:00:00Z",
+  "overall_status": "ready-for-milestone-1",
+  "active_milestone_id": "milestone-1",
+  "active_workstream": {
+    "id": "market-legal-source-feasibility",
+    "module": "product-research",
+    "status": "ready",
+    "owner": "product",
+    "contract": "docs/00-product/LAUNCH_SCOPE.md"
+  },
+  "completed_milestone_ids": ["milestone-0"],
+  "blocked_by": [],
+  "evidence": [
+    "docs/project/MILESTONE_0_REPORT.md",
+    "node tools/validate-project-context.js"
+  ],
+  "next_actions": [
+    "Create the Milestone 1 research contract",
+    "Inventory official Computer Engineering MSc sources and redistribution constraints",
+    "Define the evidence-based GA content coverage contract",
+    "Research candidate needs, substitutes, willingness to pay, and operational content cost"
+  ]
+}
