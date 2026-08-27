@@ -3,7 +3,7 @@
   "project_id": "konkur-platform",
   "product_name": "Konkur",
   "constitution_version": 1,
-  "context_updated_on": "2026-08-27",
+  "context_updated_on": "2026-08-28",
   "prototype": {
     "name": "Prototype Zero",
     "status": "historical-evidence",
@@ -59,7 +59,9 @@
     {"id": "D-003", "status": "accepted", "value": "no-public-release-before-ga", "adr": "docs/decisions/ADR-0026-general-availability-only.md"},
     {"id": "D-004", "status": "accepted", "value": "ai-optional-and-non-authoritative", "adr": "docs/decisions/ADR-0027-ai-as-optional-accelerator.md"},
     {"id": "D-005", "status": "accepted", "value": "context-as-code", "adr": "docs/decisions/ADR-0028-context-as-code.md"},
-    {"id": "D-006", "status": "accepted", "value": "computer-engineering-msc-first-complete-vertical", "adr": "docs/decisions/ADR-0024-production-successor.md"}
+    {"id": "D-006", "status": "accepted", "value": "computer-engineering-msc-first-complete-vertical", "adr": "docs/decisions/ADR-0024-production-successor.md"},
+    {"id": "D-007", "status": "accepted", "value": "source-metadata-and-links-only-before-rights-clearance", "adr": "docs/decisions/ADR-0029-source-rights-default.md"},
+    {"id": "D-008", "status": "accepted", "value": "commercial-question-corpus-is-independently-authored", "adr": "docs/decisions/ADR-0030-original-authored-question-model.md"}
   ],
   "required_documents": [
     "AGENTS.md",
@@ -79,6 +81,17 @@
     "docs/project/RISK_REGISTER.md",
     "docs/project/DECISIONS_PENDING.md",
     "docs/project/MILESTONE_0_REPORT.md",
+    "docs/project/MILESTONE_1_REPORT.md",
+    "docs/research/MILESTONE_1_RESEARCH_CONTRACT.md",
+    "docs/research/MILESTONE_1_EVIDENCE_LEDGER.md",
+    "docs/research/OFFICIAL_SOURCE_INVENTORY_AND_GAP_REPORT.md",
+    "docs/research/SOURCE_RIGHTS_DECISION.md",
+    "docs/research/COMPUTER_ENGINEERING_MSC_GA_CONTENT_RELEASE_CONTRACT.md",
+    "docs/research/CUSTOMER_AND_PRICING_RESEARCH_PLAN.md",
+    "docs/research/COMPETITOR_SNAPSHOT.md",
+    "docs/research/CONTENT_OPERATIONS_AND_COST_MODEL.md",
+    "docs/decisions/ADR-0029-source-rights-default.md",
+    "docs/decisions/ADR-0030-original-authored-question-model.md",
     "project/context.yaml",
     "project/state.yaml",
     "project/roadmap.yaml"

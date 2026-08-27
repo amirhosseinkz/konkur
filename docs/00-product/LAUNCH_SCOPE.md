@@ -47,7 +47,7 @@ GA combines a production-complete platform with one content-complete vertical: C
 
 ### Content Vertical
 
-Computer Engineering MSc must have the verified source coverage and reviewed learning coverage declared by the content release contract created during Milestone 1. Legacy-unverified prototype content is not automatically eligible.
+Computer Engineering MSc must have the independently authored, academically source-backed, and reviewed learning coverage declared by the content release contract created during Milestone 1. Official artifacts provide factual exam metadata and canonical links only; their questions, keys, corrections, and page images are not part of the commercial corpus. Legacy-unverified prototype content is not automatically eligible.
 
 ## Excluded From GA
 

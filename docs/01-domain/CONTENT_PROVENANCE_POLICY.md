@@ -57,6 +57,14 @@ Requires source links, educational review, language review where applicable, and
 
 AI- or template-generated content records its inputs and generation version. It remains a draft until a human editor approves it. Generated text may explain an official answer but cannot create one.
 
+## Independently Authored Questions
+
+- Commercial learner questions are original Konkur works supported by approved academic references and factual official exam metadata.
+- Authorship, reference revisions, subject review, language review, and originality review are recorded.
+- Official or third-party questions may not be used as hidden templates for transcription, translation, paraphrase, or near-copying.
+- Konkur-authored answers are never labeled `official-answer`, and authored questions are never presented as past-paper questions.
+- Historical frequency and occurrence claims remain unknown unless a separate rights-cleared evidence contract supports them.
+
 ## Copyright And Redistribution
 
 Before storing or publicly serving an artifact, record its owner, source URL, retrieval date, known license or legal basis, allowed uses, and restrictions. Where redistribution is uncertain, store metadata and links without publishing the file until legal review decides.

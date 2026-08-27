@@ -1,26 +1,35 @@
 {
   "schema_version": 1,
   "project_id": "konkur-platform",
-  "updated_at": "2026-08-27T00:00:00Z",
-  "overall_status": "ready-for-milestone-1",
-  "active_milestone_id": "milestone-1",
+  "updated_at": "2026-08-28T00:00:00Z",
+  "overall_status": "ready-for-milestone-2",
+  "active_milestone_id": "milestone-2",
   "active_workstream": {
-    "id": "market-legal-source-feasibility",
-    "module": "product-research",
+    "id": "production-architecture-design-system",
+    "module": "architecture",
     "status": "ready",
-    "owner": "product",
-    "contract": "docs/00-product/LAUNCH_SCOPE.md"
+    "owner": "architecture",
+    "contract": "docs/02-architecture/ARCHITECTURE_PRINCIPLES.md"
   },
-  "completed_milestone_ids": ["milestone-0"],
+  "completed_milestone_ids": ["milestone-0", "milestone-1"],
   "blocked_by": [],
   "evidence": [
     "docs/project/MILESTONE_0_REPORT.md",
+    "docs/project/MILESTONE_1_REPORT.md",
+    "docs/decisions/ADR-0029-source-rights-default.md",
+    "docs/decisions/ADR-0030-original-authored-question-model.md",
+    "docs/research/MILESTONE_1_EVIDENCE_LEDGER.md",
+    "docs/research/OFFICIAL_SOURCE_INVENTORY_AND_GAP_REPORT.md",
+    "docs/research/SOURCE_RIGHTS_DECISION.md",
+    "docs/research/COMPUTER_ENGINEERING_MSC_GA_CONTENT_RELEASE_CONTRACT.md",
+    "docs/research/CUSTOMER_AND_PRICING_RESEARCH_PLAN.md",
+    "docs/research/COMPETITOR_SNAPSHOT.md",
+    "docs/research/CONTENT_OPERATIONS_AND_COST_MODEL.md",
     "node tools/validate-project-context.js"
   ],
   "next_actions": [
-    "Create the Milestone 1 research contract",
-    "Inventory official Computer Engineering MSc sources and redistribution constraints",
-    "Define the evidence-based GA content coverage contract",
-    "Research candidate needs, substitutes, willingness to pay, and operational content cost"
+    "Create the production stack ADR and compare deployable architecture options",
+    "Define the production threat model and module domain contracts",
+    "Specify the design system, accessibility target, browser matrix, and performance budgets"
   ]
 }

@@ -14,15 +14,15 @@
     {
       "id": "milestone-1",
       "name": "Market, Legal, Source, and Content Feasibility",
-      "status": "ready",
+      "status": "completed",
       "dependencies": ["milestone-0"],
       "public_release": false,
-      "exit_evidence": ["Source rights decision", "Official source inventory", "Computer Engineering MSc content release contract", "Pricing research plan"]
+      "exit_evidence": ["Accepted non-reproduction source strategy", "Official source inventory and bounded gap report", "Approved original-content Computer Engineering MSc release contract", "Pricing research plan", "Content operations and cost model"]
     },
     {
       "id": "milestone-2",
       "name": "Production Architecture and Design System",
-      "status": "blocked",
+      "status": "ready",
       "dependencies": ["milestone-1"],
       "public_release": false,
       "exit_evidence": ["Stack ADR", "Threat model", "Domain contracts", "Design system specification", "Performance budgets"]
@@ -41,7 +41,7 @@
       "status": "blocked",
       "dependencies": ["milestone-3"],
       "public_release": false,
-      "exit_evidence": ["Source ingestion", "Editorial workflow", "Publication and rollback", "Admin RBAC and audit"]
+      "exit_evidence": ["Source ingestion", "Editorial workflow", "Measured no-AI content throughput and originality review", "Publication and rollback", "Admin RBAC and audit"]
     },
     {
       "id": "milestone-5",

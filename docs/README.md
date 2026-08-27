@@ -30,10 +30,25 @@
 - `06-operations/PRODUCTION_LAUNCH_GATES.md`
 - `project/RISK_REGISTER.md`
 - `project/DECISIONS_PENDING.md`
+- `project/MILESTONE_1_REPORT.md`: completed feasibility milestone and handoff
+
+## Research
+
+- `research/MILESTONE_1_RESEARCH_CONTRACT.md`: completed evidence and integrity contract
+- `research/MILESTONE_1_EVIDENCE_LEDGER.md`: dated external and repository evidence
+- `research/OFFICIAL_SOURCE_INVENTORY_AND_GAP_REPORT.md`: annual source status and acquisition gaps
+- `research/SOURCE_RIGHTS_DECISION.md`: detailed rights use matrix and unresolved legal questions
+- `research/COMPUTER_ENGINEERING_MSC_GA_CONTENT_RELEASE_CONTRACT.md`: proposed release coverage and gates
+- `research/CUSTOMER_AND_PRICING_RESEARCH_PLAN.md`: private candidate and pricing fieldwork
+- `research/COMPETITOR_SNAPSHOT.md`: dated direct-competitor and substitute observations
+- `research/CONTENT_OPERATIONS_AND_COST_MODEL.md`: editorial workflow, pilot, and cost formulas
 
 ## Decisions
 
 Accepted production decisions are append-only records under `decisions/`. A later ADR may supersede an earlier ADR but must not rewrite it.
+
+- `decisions/ADR-0029-source-rights-default.md`: metadata-and-links-only default before rights clearance
+- `decisions/ADR-0030-original-authored-question-model.md`: original commercial question corpus with no official-question reproduction
 
 ## Module Documentation
 
