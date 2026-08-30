@@ -388,7 +388,7 @@ jobs:
           esac
       - name: Scan produced image
         if: ${{ always() && steps.build.outcome == 'success' }}
-        uses: aquasecurity/trivy-action@0.36.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
           format: sarif
@@ -451,7 +451,7 @@ jobs:
           - name: grafana
             image: grafana/grafana:12.1.1
     steps:
-      - uses: aquasecurity/trivy-action@0.36.0
+      - uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: ${{ matrix.image }}
           format: table
