@@ -24,3 +24,20 @@ Similarity and plagiarism review are publication gates. A source artifact may no
 - Content operations must track authorship, academic references, reviewers, originality checks, and revision history.
 - The content throughput pilot and full contract verification move to the content-platform and vertical milestones, where actual reviewed content exists.
 - Reusing official questions in the future requires a superseding decision and explicit rights evidence; it cannot silently enter the authored corpus.
+
+## Reconsideration Procedure
+
+This decision is intentionally reversible, but never by editing this ADR or relabeling existing records.
+
+A future proposal to use official or third-party questions must provide:
+
+1. A new RFC defining each artifact type, intended use, delivery surface, jurisdiction, owner, and learner claim.
+2. Written rights evidence for storage, transcription, transformation, accessibility adaptation, commercial delivery, correction handling, and archival retention.
+3. A superseding ADR that identifies exactly which part of ADR-0030 changes and which restrictions remain.
+4. Separate domain identities for `Authored Question` and `Source Question`; one record may not change origin type.
+5. A migration plan that introduces no official text into existing authored-question revisions, indexes, analytics, or caches.
+6. Independent provenance, content, security, accessibility, and originality reviews.
+7. Withdrawal, rollback, learner-notification, and audit behavior for permission loss or source correction.
+8. Updated content release metrics with explicit denominators; historical coverage may not be implied from a partial corpus.
+
+Until all eight items are accepted, ADR-0029 and ADR-0030 remain the controlling behavior. A future team can therefore recover both the decision and the path for changing it without reconstructing this conversation.

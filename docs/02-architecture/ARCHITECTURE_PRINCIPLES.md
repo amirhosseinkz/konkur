@@ -1,6 +1,6 @@
 # Architecture Principles
 
-Status: Accepted constraints; stack selection pending Milestone 2
+Status: Accepted constraints; stack selected by ADR-0031
 
 ## Delivery Model
 

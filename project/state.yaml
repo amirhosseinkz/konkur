@@ -1,17 +1,17 @@
 {
   "schema_version": 1,
   "project_id": "konkur-platform",
-  "updated_at": "2026-08-28T00:00:00Z",
-  "overall_status": "ready-for-milestone-2",
-  "active_milestone_id": "milestone-2",
+  "updated_at": "2026-08-30T15:03:24Z",
+  "overall_status": "milestone-3-in-progress",
+  "active_milestone_id": "milestone-3",
   "active_workstream": {
-    "id": "production-architecture-design-system",
-    "module": "architecture",
-    "status": "ready",
-    "owner": "architecture",
-    "contract": "docs/02-architecture/ARCHITECTURE_PRINCIPLES.md"
+    "id": "platform-foundation",
+    "module": "platform",
+    "status": "in-progress",
+    "owner": "engineering",
+    "contract": "docs/rfcs/RFC-0001-production-platform-architecture.md"
   },
-  "completed_milestone_ids": ["milestone-0", "milestone-1"],
+  "completed_milestone_ids": ["milestone-0", "milestone-1", "milestone-2"],
   "blocked_by": [],
   "evidence": [
     "docs/project/MILESTONE_0_REPORT.md",
@@ -25,11 +25,30 @@
     "docs/research/CUSTOMER_AND_PRICING_RESEARCH_PLAN.md",
     "docs/research/COMPETITOR_SNAPSHOT.md",
     "docs/research/CONTENT_OPERATIONS_AND_COST_MODEL.md",
+    "docs/research/MILESTONE_3_PROVIDER_SHORTLIST.md",
+    "docs/project/MILESTONE_2_REPORT.md",
+    "docs/rfcs/RFC-0001-production-platform-architecture.md",
+    "docs/decisions/ADR-0031-production-platform-stack.md",
+    "docs/decisions/ADR-0032-product-identity-and-design-system.md",
+    "docs/02-architecture/DOMAIN_CONTRACTS.md",
+    "docs/03-security/PLATFORM_THREAT_MODEL.md",
+    "docs/04-engineering/PERFORMANCE_BUDGETS.md",
+    "docs/05-design/DESIGN_SYSTEM.md",
+    "docs/05-design/MOTION_SYSTEM.md",
+    "docs/05-design/ACCESSIBILITY_AND_BROWSER_MATRIX.md",
+    "docs/project/MILESTONE_3_PROGRESS.md",
+    "platform/package.json",
+    "platform/TEST_PLAN.md",
+    "platform/apps/learner-web/app/page.tsx",
+    "platform/packages/modules/identity/src/auth.ts",
+    "platform/packages/database/src/migrations/001_platform_transport.ts",
+    "platform/infra/compose/compose.development.yml",
+    ".github/workflows/platform-ci.yml",
     "node tools/validate-project-context.js"
   ],
   "next_actions": [
-    "Create the production stack ADR and compare deployable architecture options",
-    "Define the production threat model and module domain contracts",
-    "Specify the design system, accessibility target, browser matrix, and performance budgets"
+    "Approve the named hosting, storage, registry, recovery, RPO, and RTO decisions without guessing unresolved provider policy",
+    "Commit the integrated bounded-spike source and obtain immutable passing CI artifacts for all platform gates",
+    "Verify digest promotion and rollback plus database and object recovery in the selected production-like independent failure domain"
   ]
 }

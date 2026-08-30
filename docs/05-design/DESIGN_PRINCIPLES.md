@@ -1,6 +1,6 @@
 # Design Principles
 
-Status: Direction accepted; visual system pending
+Status: Direction accepted; visual system defined in `DESIGN_SYSTEM.md`
 
 ## Product Character
 
@@ -23,4 +23,4 @@ Konkur should feel focused, precise, fast, credible, and distinctly Persian. It 
 
 Milestone 2 must define typography, spacing, color, elevation, motion, icons, data visualization, content layouts, forms, feedback, exam controls, and responsive behavior as reusable tokens and components.
 
-No final brand style, color system, or typeface is selected by this document.
+The accepted visual, motion, accessibility and browser contracts are defined in `DESIGN_SYSTEM.md`, `MOTION_SYSTEM.md`, and `ACCESSIBILITY_AND_BROWSER_MATRIX.md`.

@@ -22,7 +22,7 @@
     {
       "id": "milestone-2",
       "name": "Production Architecture and Design System",
-      "status": "ready",
+      "status": "completed",
       "dependencies": ["milestone-1"],
       "public_release": false,
       "exit_evidence": ["Stack ADR", "Threat model", "Domain contracts", "Design system specification", "Performance budgets"]
@@ -30,7 +30,7 @@
     {
       "id": "milestone-3",
       "name": "Platform Foundation",
-      "status": "blocked",
+      "status": "in-progress",
       "dependencies": ["milestone-2"],
       "public_release": false,
       "exit_evidence": ["Environments", "CI/CD", "Identity", "Database", "Observability", "Backup and restore foundation"]

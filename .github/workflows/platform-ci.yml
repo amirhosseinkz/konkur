@@ -1,0 +1,458 @@
+name: Platform CI
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/platform-ci.yml
+      - platform/**
+      - project/**
+      - docs/**
+      - tools/validate-project-context.js
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/platform-ci.yml
+      - platform/**
+      - project/**
+      - docs/**
+      - tools/validate-project-context.js
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: platform-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  context:
+    name: Context contract
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.20.0
+      - run: node tools/validate-project-context.js
+
+  foundation:
+    name: Infrastructure and scripts
+    runs-on: ubuntu-24.04
+    env:
+      COMPOSE_PROJECT_NAME: konkur-ci-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Require the platform dependency lock
+        run: |
+          if [[ -f platform/package.json && ! -f platform/pnpm-lock.yaml ]]; then
+            printf 'platform/pnpm-lock.yaml is required when platform/package.json exists\n' >&2
+            exit 1
+          fi
+      - name: Check shell scripts
+        run: shellcheck --severity=warning platform/scripts/*.sh
+      - name: Validate and exercise alert rules
+        run: |
+          docker run --rm --entrypoint /bin/promtool \
+            --volume "$PWD/platform/infra/observability:/etc/prometheus:ro" \
+            --workdir /etc/prometheus \
+            prom/prometheus:v3.5.0 \
+            test rules alerts.test.yml
+      - name: Reject unpinned or floating service images
+        run: |
+          if rg --line-number '^\s*image:\s*[^[:space:]]+:(latest|stable|main|master|edge)\s*$' platform/infra; then
+            printf 'floating container image tag found\n' >&2
+            exit 1
+          fi
+      - name: Generate ephemeral foundation credentials
+        run: |
+          postgres_password="$(openssl rand -hex 24)"
+          minio_user="ci-$(openssl rand -hex 8)"
+          minio_password="$(openssl rand -hex 24)"
+          grafana_password="$(openssl rand -hex 24)"
+          printf '::add-mask::%s\n' "$postgres_password" "$minio_user" "$minio_password" "$grafana_password"
+          {
+            printf 'POSTGRES_PASSWORD=%s\n' "$postgres_password"
+            printf 'MINIO_ROOT_USER=%s\n' "$minio_user"
+            printf 'MINIO_ROOT_PASSWORD=%s\n' "$minio_password"
+            printf 'GRAFANA_ADMIN_PASSWORD=%s\n' "$grafana_password"
+          } >> "$GITHUB_ENV"
+      - name: Validate Compose models without starting containers
+        run: |
+          docker compose -f platform/infra/compose/compose.development.yml config --quiet
+          docker compose -f platform/infra/compose/compose.ci.yml config --quiet
+          docker compose -f platform/infra/compose/compose.development.yml config --format json > "${RUNNER_TEMP}/development-compose.json"
+          jq --exit-status '[.services[].ports[]? | .host_ip] | all(. == "127.0.0.1")' "${RUNNER_TEMP}/development-compose.json"
+      - name: Start CI foundation
+        run: docker compose -f platform/infra/compose/compose.ci.yml up -d --wait
+      - name: Verify CI foundation health
+        run: |
+          docker compose -f platform/infra/compose/compose.ci.yml ps
+          unhealthy="$(docker compose -f platform/infra/compose/compose.ci.yml ps --status unhealthy --quiet)"
+          [[ -z "$unhealthy" ]] || {
+            docker compose -f platform/infra/compose/compose.ci.yml logs
+            exit 1
+          }
+      - name: Verify object-storage delete and restore
+        run: |
+          docker run --rm \
+            --network "${COMPOSE_PROJECT_NAME}_data" \
+            --env MINIO_ENDPOINT=http://minio:9000 \
+            --env MINIO_ROOT_USER \
+            --env MINIO_ROOT_PASSWORD \
+            --env RECOVERY_RUN_ID="${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+            --volume "$PWD/platform/scripts/verify-object-storage-recovery.sh:/verify-object-storage-recovery.sh:ro" \
+            --entrypoint /usr/bin/bash \
+            minio/mc:RELEASE.2025-04-16T18-13-26Z@sha256:aead63c77f9db9107f1696fb08ecb0faeda23729cde94b0f663edf4fe09728e3 \
+            /verify-object-storage-recovery.sh
+      - name: Clean up CI foundation
+        if: ${{ always() }}
+        run: docker compose -f platform/infra/compose/compose.ci.yml down --volumes --remove-orphans
+
+  application:
+    name: Install, lint, type, test, build, and migrations
+    runs-on: ubuntu-24.04
+    env:
+      CI: "true"
+      DATABASE_URL: postgresql://postgres@127.0.0.1:5432/konkur
+      IDENTITY_TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:5432/konkur
+      KONKUR_ENVIRONMENT: development
+      REQUIRE_IDENTITY_TEST_DATABASE: "1"
+      TEST_DATABASE_URL: postgresql://postgres@127.0.0.1:5432/konkur
+    services:
+      postgres:
+        image: postgres:17.6-alpine3.22
+        env:
+          POSTGRES_DB: konkur
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready --username postgres --dbname konkur"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.20.0
+          cache: pnpm
+          cache-dependency-path: platform/pnpm-lock.yaml
+      - name: Install locked dependencies
+        working-directory: platform
+        run: pnpm install --frozen-lockfile
+      - name: Verify required workspace scripts
+        working-directory: platform
+        run: |
+          node -e 'const p=require("./package.json"); for (const n of ["lint","check-types","test","build","migration:check"]) if (!p.scripts?.[n]) { console.error("missing platform script: " + n); process.exitCode=1 }'
+      - name: Lint
+        working-directory: platform
+        run: pnpm run lint
+      - name: Typecheck
+        working-directory: platform
+        run: pnpm run check-types
+      - name: Check migrations
+        working-directory: platform
+        run: pnpm run migration:check
+      - name: Apply migrations to fresh PostgreSQL
+        working-directory: platform
+        run: |
+          pnpm --filter @konkur/database build
+          scripts/migrate.sh up
+          pnpm --filter @konkur/worker build
+          pnpm --filter @konkur/worker migrate
+      - name: Provision and test runtime database roles
+        working-directory: platform
+        env:
+          POSTGRES_SERVICE_ID: ${{ job.services.postgres.id }}
+        run: |
+          docker exec --interactive "$POSTGRES_SERVICE_ID" \
+            psql --username postgres --dbname konkur \
+            < infra/postgres/runtime-roles.sql
+          docker exec --interactive \
+            --env DATABASE_URL=postgresql://postgres@127.0.0.1:5432/konkur \
+            "$POSTGRES_SERVICE_ID" \
+            /bin/bash \
+            < scripts/verify-database-roles.sh
+      - name: Start worker with its runtime database role
+        working-directory: platform/apps/worker
+        env:
+          DATABASE_URL: postgresql://postgres@127.0.0.1:5432/konkur
+          PGOPTIONS: -c role=konkur_worker
+        run: |
+          node --input-type=module --eval "
+            import { run } from 'graphile-worker';
+            import { taskList } from './dist/tasks.js';
+            const runner = await run({
+              connectionString: process.env.DATABASE_URL,
+              concurrency: 1,
+              noHandleSignals: true,
+              taskList,
+            });
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            await runner.stop();
+          "
+      - name: Test
+        working-directory: platform
+        run: pnpm run test
+      - name: Verify full PostgreSQL backup and restore
+        working-directory: platform
+        env:
+          POSTGRES_SERVICE_ID: ${{ job.services.postgres.id }}
+        run: |
+          cleanup() {
+            docker exec "$POSTGRES_SERVICE_ID" dropdb --username postgres --if-exists konkur_restore_ci >/dev/null 2>&1 || true
+            docker exec "$POSTGRES_SERVICE_ID" rm -rf /tmp/konkur-scripts /tmp/konkur-ci.dump /tmp/konkur-ci.dump.sha256 >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          docker cp scripts/. "$POSTGRES_SERVICE_ID":/tmp/konkur-scripts
+          docker exec \
+            --env KONKUR_ENVIRONMENT=ci \
+            --env POSTGRES_HOST=127.0.0.1 \
+            --env POSTGRES_PORT=5432 \
+            --env POSTGRES_DATABASE=konkur \
+            --env POSTGRES_USER=postgres \
+            --env POSTGRES_PASSWORD=ci-trust-authentication \
+            --env POSTGRES_BACKUP_ROLE=konkur_backup \
+            --env ALLOW_UNENCRYPTED_BACKUP=true \
+            "$POSTGRES_SERVICE_ID" \
+            /tmp/konkur-scripts/postgres-backup.sh /tmp/konkur-ci.dump
+          docker exec \
+            --env KONKUR_ENVIRONMENT=ci \
+            --env POSTGRES_HOST=127.0.0.1 \
+            --env POSTGRES_PORT=5432 \
+            --env POSTGRES_DATABASE=konkur \
+            --env POSTGRES_USER=postgres \
+            --env POSTGRES_PASSWORD=ci-trust-authentication \
+            --env ALLOW_UNENCRYPTED_BACKUP=true \
+            --env RESTORE_CONFIRM_TARGET=127.0.0.1/konkur_restore_ci \
+            "$POSTGRES_SERVICE_ID" \
+            /tmp/konkur-scripts/restore-disposable.sh \
+            /tmp/konkur-ci.dump konkur_restore_ci
+      - name: Build
+        working-directory: platform
+        run: pnpm run build
+
+  application-images:
+    name: Application image (${{ matrix.target }})
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [learner-web, admin-web, api, worker]
+    services:
+      postgres:
+        image: postgres:17.6-alpine3.22
+        env:
+          POSTGRES_DB: konkur
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready --username postgres --dbname konkur"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set reproducible build metadata
+        run: echo "SOURCE_DATE_EPOCH=$(git show -s --format=%ct "$GITHUB_SHA")" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - name: Build locked application image
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: platform
+          file: platform/Dockerfile
+          target: ${{ matrix.target }}
+          load: true
+          push: false
+          provenance: false
+          sbom: false
+          tags: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
+          build-args: |
+            SOURCE_DATE_EPOCH=${{ env.SOURCE_DATE_EPOCH }}
+            OCI_SOURCE=${{ github.server_url }}/${{ github.repository }}
+            OCI_REVISION=${{ github.sha }}
+          cache-from: type=gha,scope=platform-${{ matrix.target }}
+          cache-to: type=gha,mode=max,scope=platform-${{ matrix.target }}
+      - name: Record immutable image identity
+        env:
+          BUILD_DIGEST: ${{ steps.build.outputs.digest }}
+          IMAGE_REF: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          mkdir -p "${RUNNER_TEMP}/application-image-evidence"
+          [[ "$BUILD_DIGEST" =~ ^sha256:[0-9a-f]{64}$ ]]
+          image_id="$(docker image inspect "$IMAGE_REF" --format '{{.Id}}')"
+          jq --null-input \
+            --arg target "$TARGET" \
+            --arg source_revision "$GITHUB_SHA" \
+            --arg oci_digest "$BUILD_DIGEST" \
+            --arg local_image_id "$image_id" \
+            '{target: $target, source_revision: $source_revision, oci_digest: $oci_digest, local_image_id: $local_image_id, published: false}' \
+            > "${RUNNER_TEMP}/application-image-evidence/${TARGET}.digest.json"
+      - name: Generate SPDX SBOM
+        uses: anchore/sbom-action@v0
+        with:
+          image: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
+          format: spdx-json
+          output-file: ${{ runner.temp }}/application-image-evidence/${{ matrix.target }}.sbom.spdx.json
+          upload-artifact: false
+      - name: Smoke application boundary
+        env:
+          IMAGE_REF: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
+          TARGET: ${{ matrix.target }}
+        run: |
+          case "$TARGET" in
+            learner-web)
+              container="konkur-learner-smoke-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+              internal_port=3000
+              ;;
+            admin-web)
+              container="konkur-admin-smoke-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+              internal_port=3001
+              ;;
+            api)
+              container="konkur-api-smoke-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+              internal_port=4000
+              ;;
+            worker)
+              container="konkur-worker-smoke-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+              docker run --rm --network host \
+                --env NODE_ENV=development \
+                --env DATABASE_URL=postgresql://postgres@127.0.0.1:5432/konkur \
+                "$IMAGE_REF" node dist/migrate.js
+              trap 'docker logs "$container" || true; docker rm --force "$container" >/dev/null 2>&1 || true' EXIT
+              docker run --detach --name "$container" --network host \
+                --env NODE_ENV=development \
+                --env DATABASE_URL=postgresql://postgres@127.0.0.1:5432/konkur \
+                "$IMAGE_REF"
+              sleep 3
+              [[ "$(docker inspect "$container" --format '{{.State.Running}}')" == true ]]
+              exit 0
+              ;;
+          esac
+
+          trap 'docker logs "$container" || true; docker rm --force "$container" >/dev/null 2>&1 || true' EXIT
+
+          if [[ "$TARGET" == api ]]; then
+            learner_auth_secret="$(openssl rand -hex 32)"
+            admin_auth_secret="$(openssl rand -hex 32)"
+            printf '::add-mask::%s\n' "$learner_auth_secret" "$admin_auth_secret"
+            docker run --rm --network host \
+              --env NODE_ENV=development \
+              --env DATABASE_URL='postgresql://postgres@127.0.0.1:5432/konkur' \
+              "$IMAGE_REF" node node_modules/@konkur/database/dist/migrate.js up
+            docker run --detach --name "$container" --network host \
+              --env NODE_ENV=development \
+              --env DATABASE_URL='postgresql://postgres@127.0.0.1:5432/konkur' \
+              --env LEARNER_AUTH_BASE_URL='http://learner.invalid' \
+              --env LEARNER_AUTH_SECRET="$learner_auth_secret" \
+              --env ADMIN_AUTH_BASE_URL='http://admin.invalid' \
+              --env ADMIN_AUTH_SECRET="$admin_auth_secret" \
+              "$IMAGE_REF"
+          else
+            docker run --detach --name "$container" --publish "127.0.0.1::${internal_port}" "$IMAGE_REF"
+          fi
+
+          if [[ "$TARGET" == api ]]; then
+            host_port=4000
+          else
+            host_port="$(docker inspect "$container" --format "{{(index (index .NetworkSettings.Ports \"${internal_port}/tcp\") 0).HostPort}}")"
+          fi
+          for _ in {1..30}; do
+            http_status="$(curl --silent --output "${RUNNER_TEMP}/${TARGET}.response" --write-out '%{http_code}' "http://127.0.0.1:${host_port}/" || true)"
+            [[ "$http_status" != 000 ]] && break
+            sleep 1
+          done
+
+          case "$TARGET" in
+            learner-web)
+              [[ "$http_status" == 200 ]]
+              rg --fixed-strings '<html lang="fa-IR" dir="rtl">' "${RUNNER_TEMP}/${TARGET}.response"
+              ;;
+            admin-web)
+              [[ "$http_status" == 404 ]]
+              ;;
+            api)
+              curl --fail --silent "http://127.0.0.1:${host_port}/v1/ready" \
+                | jq --exit-status '.status == "ok" and .service == "konkur-api" and .ai.required_for_core_flows == false'
+              ;;
+          esac
+      - name: Scan produced image
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
+          format: sarif
+          output: ${{ runner.temp }}/application-image-evidence/${{ matrix.target }}.trivy.sarif
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+          ignore-unfixed: false
+          exit-code: "1"
+      - name: Retain digest, SBOM, and scan evidence
+        if: ${{ always() && steps.build.outcome == 'success' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: application-image-${{ matrix.target }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/application-image-evidence/
+          if-no-files-found: error
+          retention-days: 30
+
+  dependency-review:
+    name: Dependency review
+    if: ${{ github.event_name == 'pull_request' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  foundation-container-scan:
+    name: Foundation container scan (${{ matrix.name }})
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: postgres
+            image: postgres:17.6-alpine3.22
+          - name: minio
+            image: minio/minio:RELEASE.2025-04-22T22-12-26Z
+          - name: otel-collector
+            image: otel/opentelemetry-collector-contrib:0.132.0
+          - name: prometheus
+            image: prom/prometheus:v3.5.0
+          - name: loki
+            image: grafana/loki:3.5.3
+          - name: tempo
+            image: grafana/tempo:2.8.2
+          - name: grafana
+            image: grafana/grafana:12.1.1
+    steps:
+      - uses: aquasecurity/trivy-action@0.33.1
+        with:
+          image-ref: ${{ matrix.image }}
+          format: table
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+          exit-code: "1"

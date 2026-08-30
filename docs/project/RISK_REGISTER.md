@@ -18,5 +18,8 @@ Status: Active
 | R-012 | A no-MVP policy delays learning until expensive rework | High | Private research and internal validation permitted; no public production claim | Product | Open |
 | R-013 | Official source discovery is incomplete or intermittently accessible | High | Use official metadata and canonical links only; authored corpus does not depend on historical artifact acquisition | Content/Product | Mitigated by ADR-0030 |
 | R-014 | Candidate and pricing samples produce non-representative certainty | High | Quotas, pre-registered interpretation rules, raw denominators, explicit inconclusive outcomes | Product/Research | Open |
+| R-015 | PostgreSQL carries too many early platform responsibilities | High | Bounded Milestone 3 spike, per-capability metrics, module schemas, extraction only after measured failure and ADR | Architecture/Operations | Open |
+| R-016 | Persian RTL, bidi, MathML and accessibility defects block core learning | High | Accepted design contracts, mixed-direction fixtures, WCAG 2.2 AA, screen-reader and responsive evidence gates | Design/Engineering | Open |
+| R-017 | Self-hosted identity and observability increase operational burden | High | Maintained libraries, portable containers, patch ownership, restore drills, runbooks and security monitoring | Security/Operations | Open |
 
 Risks are reviewed at every milestone boundary. Closing a risk requires evidence or explicit residual-risk acceptance.

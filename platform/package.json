@@ -1,0 +1,27 @@
+{
+  "name": "@konkur/platform",
+  "version": "0.0.0",
+  "private": true,
+  "packageManager": "pnpm@10.15.0",
+  "engines": {
+    "node": "^22.0.0 || ^24.0.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "check-types": "turbo run check-types && tsc -p tsconfig.tests.json",
+    "dev": "turbo run dev --parallel",
+    "lint": "node scripts/check-source-policy.mjs",
+    "migration:check": "node scripts/check-migrations.mjs",
+    "test": "turbo run test"
+  },
+  "devDependencies": {
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": "8.5.26"
+    }
+  }
+}

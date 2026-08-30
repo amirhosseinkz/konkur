@@ -1,0 +1,41 @@
+groups:
+  - name: konkur-platform-foundation
+    rules:
+      - alert: KonkurAuthenticationAbuse
+        expr: sum by (surface) (rate(konkur_auth_failures_total[5m])) > 0.5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Elevated authentication failures on {{ $labels.surface }}
+
+      - alert: KonkurLearnerCredentialOnAdminBoundary
+        expr: increase(konkur_admin_boundary_rejections_total{reason="learner_credential"}[5m]) > 0
+        labels:
+          severity: critical
+        annotations:
+          summary: Learner credential rejected at the Admin boundary
+
+      - alert: KonkurQueueBacklog
+        expr: konkur_queue_oldest_job_age_seconds > 5
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: Critical queue start budget is at risk
+
+      - alert: KonkurAuditVisibilityGap
+        expr: time() - konkur_audit_last_visible_timestamp_seconds > 10
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: Audit visibility exceeds the ten-second budget
+
+      - alert: KonkurBackupStale
+        expr: time() - konkur_backup_last_success_timestamp_seconds > 86400
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: No successful database backup has been recorded in 24 hours

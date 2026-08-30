@@ -12,7 +12,10 @@ Status: Canonical terminology
 | Exam Set | An official annual Master's Entrance مجموعه امتحانی identified by its published code. |
 | Paper | One official question booklet within an Exam Cycle and scope. |
 | Section | An ordered portion of a Paper with its own subject, numbering, or timing behavior. |
-| Question | An immutable transcription or representation of one source question. |
+| Question | An assessment prompt with a stable identity and explicit origin type. It is either an Authored Question or a Source Question and never changes origin type. |
+| Authored Question | An independently authored Konkur question supported by approved academic references and originality review. Its answer is a Konkur Answer, not an Official Answer. |
+| Source Question | An immutable transcription or representation of one external source question. It is excluded from the commercial corpus under ADR-0030. |
+| Konkur Answer | An independently reviewed answer to an Authored Question. It must never be labeled as an Official Answer. |
 | Official Answer | An answer asserted by an official key source, not by Konkur. |
 | Correction | A later official change, deletion, or clarification with precedence over affected fields. |
 | Source Artifact | A paper, key, correction, catalog booklet, or approved reference with provenance. |

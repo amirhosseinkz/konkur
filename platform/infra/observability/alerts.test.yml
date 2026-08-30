@@ -1,0 +1,78 @@
+rule_files:
+  - alerts.yml
+
+evaluation_interval: 1m
+
+tests:
+  - name: authentication abuse reaches warning threshold
+    interval: 1m
+    input_series:
+      - series: 'konkur_auth_failures_total{surface="admin"}'
+        values: '0+60x11'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: KonkurAuthenticationAbuse
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              surface: admin
+            exp_annotations:
+              summary: Elevated authentication failures on admin
+
+  - name: learner credential at Admin boundary alerts immediately
+    interval: 1m
+    input_series:
+      - series: 'konkur_admin_boundary_rejections_total{reason="learner_credential"}'
+        values: '0 1 1'
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: KonkurLearnerCredentialOnAdminBoundary
+        exp_alerts:
+          - exp_labels:
+              reason: learner_credential
+              severity: critical
+            exp_annotations:
+              summary: Learner credential rejected at the Admin boundary
+
+  - name: queue start budget breach persists
+    interval: 1m
+    input_series:
+      - series: 'konkur_queue_oldest_job_age_seconds{queue="critical"}'
+        values: '6x7'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: KonkurQueueBacklog
+        exp_alerts:
+          - exp_labels:
+              queue: critical
+              severity: warning
+            exp_annotations:
+              summary: Critical queue start budget is at risk
+
+  - name: audit visibility budget breach persists
+    interval: 1m
+    input_series:
+      - series: 'konkur_audit_last_visible_timestamp_seconds'
+        values: '1x5'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: KonkurAuditVisibilityGap
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+            exp_annotations:
+              summary: Audit visibility exceeds the ten-second budget
+
+  - name: stale backup reaches critical threshold
+    interval: 5m
+    input_series:
+      - series: 'konkur_backup_last_success_timestamp_seconds'
+        values: '1x301'
+    alert_rule_test:
+      - eval_time: 25h
+        alertname: KonkurBackupStale
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+            exp_annotations:
+              summary: No successful database backup has been recorded in 24 hours
