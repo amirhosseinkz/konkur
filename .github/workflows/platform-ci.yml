@@ -135,6 +135,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
       - uses: actions/setup-node@v4
         with:
           node-version: 24.20.0
@@ -386,7 +388,7 @@ jobs:
           esac
       - name: Scan produced image
         if: ${{ always() && steps.build.outcome == 'success' }}
-        uses: aquasecurity/trivy-action@0.33.1
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: konkur/${{ matrix.target }}:ci-${{ github.run_id }}-${{ github.run_attempt }}
           format: sarif
@@ -449,7 +451,7 @@ jobs:
           - name: grafana
             image: grafana/grafana:12.1.1
     steps:
-      - uses: aquasecurity/trivy-action@0.33.1
+      - uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: ${{ matrix.image }}
           format: table

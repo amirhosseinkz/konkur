@@ -1,0 +1,12 @@
+title = "Konkur gitleaks configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Known non-secret test and placeholder values"
+regexTarget = "secret"
+regexes = [
+  '''^attempt-5-sequence-12$''',
+  '''^replace-with-at-least-32-characters$''',
+]
